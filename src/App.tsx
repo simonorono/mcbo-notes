@@ -1,3 +1,3 @@
 export default function App() {
-  return <p className="text-center mt-4">Hello, World!</p>
+  return <p className="mt-4 text-center">Hello, World!</p>
 }
