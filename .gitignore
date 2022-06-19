@@ -243,3 +243,5 @@ target/
 *.pdb
 
 # End of https://www.toptal.com/developers/gitignore/api/rust,node,intellij+all
+
+/.idea/codeStyles/codeStyleConfig.xml
