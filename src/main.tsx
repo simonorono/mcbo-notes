@@ -11,7 +11,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Index />} />
-        <Route path="form/:uuid" element={<Form />} />
+        <Route path="/form" element={<Form />} />
+        <Route path="/form/:uuid" element={<Form />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
