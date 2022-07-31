@@ -8,14 +8,13 @@ import { saveNote, useAppDispatch } from '../store'
 const FORM_BUTTON_CLASSES = 'w-[4em] font-semibold'
 
 export default function Form() {
-  const { uuid } = useParams()
+  const { id } = useParams()
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const [note, setNote] = useState({
     id: 0,
-    uuid: uuid || '',
     title: '',
     content: '',
   } as Note)
@@ -38,8 +37,8 @@ export default function Form() {
       <Toolbar>
         <div className="flex w-full justify-between">
           <h1 className="text-2xl font-bold">
-            {uuid && 'Edit note'}
-            {!uuid && 'New note'}
+            {id && 'Edit note'}
+            {!id && 'New note'}
           </h1>
 
           <div className="space-x-2">
