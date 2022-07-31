@@ -9,7 +9,7 @@ export default function Index() {
 
   return (
     <>
-      <div className="flex max-h-screen flex-col">
+      <div className="flex h-screen flex-col">
         <div className="bg-white">
           <Toolbar>
             <h1 className="w-full text-2xl font-bold">Tauri Notes</h1>
@@ -17,9 +17,19 @@ export default function Index() {
         </div>
 
         <div className="flex-grow overflow-scroll">
-          <NoteTable notes={notes} />
+          {notes.length > 0 && (
+            <>
+              <NoteTable notes={notes} />
 
-          <div className="mt-20" />
+              <div className="mt-20" />
+            </>
+          )}
+
+          {notes.length <= 0 && (
+            <div className="flex h-full items-center justify-center">
+              <p className="text-lg">There are no notes.</p>
+            </div>
+          )}
         </div>
       </div>
 
