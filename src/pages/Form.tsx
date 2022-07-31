@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { RichTextEditor } from '@mantine/rte'
+import { Editor, RichTextEditor } from '@mantine/rte'
 import Button from '../components/Button'
 import Toolbar from '../components/Toolbar'
 import { saveNote, useAppDispatch } from '../store'
@@ -19,6 +19,8 @@ export default function Form() {
     content: '',
   } as Note)
 
+  const editor = useRef<Editor>(null)
+
   const onCancelClicked = () => {
     navigate('/')
   }
@@ -28,12 +30,12 @@ export default function Form() {
     navigate('/')
   }
 
-  const updateNote = (diff: { [key: string]: number | string }) => {
+  const updateNote = (diff: { [key: string]: string }) => {
     setNote({ ...note, ...diff })
   }
 
   return (
-    <>
+    <div className="flex h-screen flex-col">
       <Toolbar>
         <div className="flex w-full justify-between">
           <h1 className="text-2xl font-bold">
@@ -53,7 +55,7 @@ export default function Form() {
         </div>
       </Toolbar>
 
-      <div className="mt-6 flex flex-col space-y-4">
+      <div className="mt-6 flex flex-grow flex-col space-y-4">
         <div className="relative mx-2 rounded-md border border-gray-300 px-3 py-2 shadow-sm">
           <label
             htmlFor="note-title"
@@ -73,8 +75,9 @@ export default function Form() {
         </div>
 
         <RichTextEditor
+          ref={editor}
           classNames={{
-            root: 'border-0 flex-grow',
+            root: 'flex-grow cursor-text border-0',
           }}
           controls={[
             ['bold', 'italic', 'underline', 'strike', 'code', 'clean'],
@@ -84,10 +87,11 @@ export default function Form() {
             ['sup', 'sub'],
             ['link', 'blockquote', 'codeBlock', 'image'],
           ]}
+          onClick={() => editor.current?.focus()}
           onChange={content => updateNote({ content })}
           value={note.content}
         />
       </div>
-    </>
+    </div>
   )
 }
