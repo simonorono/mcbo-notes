@@ -3,15 +3,35 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { RichTextEditor } from '@mantine/rte'
 import Button from '../components/Button'
 import Toolbar from '../components/Toolbar'
+import { saveNote, useAppDispatch } from '../store'
 
 const FORM_BUTTON_CLASSES = 'w-[4em] font-semibold'
 
 export default function Form() {
   const { uuid } = useParams()
+
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
+  const [note, setNote] = useState({
+    id: 0,
+    uuid: uuid || '',
+    title: '',
+    content: '',
+  } as Note)
+
+  const onCancelClicked = () => {
+    navigate('/')
+  }
+
+  const onSaveClicked = () => {
+    dispatch(saveNote(note))
+    navigate('/')
+  }
+
+  const updateNote = (diff: { [key: string]: number | string }) => {
+    setNote({ ...note, ...diff })
+  }
 
   return (
     <>
@@ -19,18 +39,17 @@ export default function Form() {
         <div className="flex w-full justify-between">
           <h1 className="text-2xl font-bold">
             {uuid && 'Edit note'}
-            {uuid || 'New note'}
+            {!uuid && 'New note'}
           </h1>
 
           <div className="space-x-2">
-            <Button
-              className={FORM_BUTTON_CLASSES}
-              onClick={() => navigate('/')}
-            >
+            <Button className={FORM_BUTTON_CLASSES} onClick={onCancelClicked}>
               Cancel
             </Button>
 
-            <Button className={FORM_BUTTON_CLASSES}>Save</Button>
+            <Button className={FORM_BUTTON_CLASSES} onClick={onSaveClicked}>
+              Save
+            </Button>
           </div>
         </div>
       </Toolbar>
@@ -45,11 +64,12 @@ export default function Form() {
           </label>
 
           <input
-            className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 outline-0 focus:outline-0"
+            className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500"
             id="note-title"
-            onChange={ev => setTitle(ev.target.value)}
+            name="title"
+            onChange={ev => updateNote({ title: ev.target.value })}
             placeholder="Note title"
-            value={title}
+            value={note.title}
           />
         </div>
 
@@ -65,8 +85,8 @@ export default function Form() {
             ['sup', 'sub'],
             ['link', 'blockquote', 'codeBlock', 'image'],
           ]}
-          onChange={setContent}
-          value={content}
+          onChange={content => updateNote({ content })}
+          value={note.content}
         />
       </div>
     </>
