@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/form" element={<Form />} />
-          <Route path="/form/:uuid" element={<Form />} />
+          <Route path="/form/:id" element={<Form />} />
         </Routes>
       </BrowserRouter>
     </Provider>
