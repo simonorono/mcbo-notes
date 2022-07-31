@@ -8,6 +8,8 @@ const initialState: NoteState = {
   all: [],
 }
 
+let id = 0
+
 const noteSlice = createSlice({
   name: 'notes',
   initialState,
@@ -16,6 +18,8 @@ const noteSlice = createSlice({
       state.all = action.payload
     },
     saveNote(state, action: PayloadAction<Note>) {
+      action.payload.id = ++id
+
       state.all = [...state.all, action.payload]
     },
     deleteNote(state, action: PayloadAction<Note>) {
