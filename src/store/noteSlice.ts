@@ -18,9 +18,12 @@ const noteSlice = createSlice({
     saveNote(state, action: PayloadAction<Note>) {
       state.all = [...state.all, action.payload]
     },
+    deleteNote(state, action: PayloadAction<Note>) {
+      state.all = state.all.filter(note => note.id != action.payload.id)
+    },
   },
 })
 
-export const { saveNote, setAllNotes } = noteSlice.actions
+export const { deleteNote, saveNote, setAllNotes } = noteSlice.actions
 
 export default noteSlice.reducer

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { deleteNote, useAppDispatch } from '../store'
 
 const ACTIONS_CLASSES = 'text-green-800'
 
@@ -8,6 +9,8 @@ interface Props {
 
 export default function NoteTable(props: Props) {
   const { notes } = props
+
+  const dispatch = useAppDispatch()
 
   return (
     <table className="border-b-200 min-w-full divide-y divide-gray-300 border">
@@ -24,7 +27,7 @@ export default function NoteTable(props: Props) {
               </Link>
               <a
                 className={`${ACTIONS_CLASSES} cursor-pointer`}
-                onClick={() => {}}
+                onClick={() => dispatch(deleteNote(note))}
               >
                 Delete
               </a>
