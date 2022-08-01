@@ -31,4 +31,11 @@ export default class DB {
 
     return note
   }
+
+  public async updateNote(note: Note) {
+    await this.db.execute(
+      'UPDATE notes SET title = $1, content = $2 WHERE id = $3',
+      [note.title, note.content, note.id]
+    )
+  }
 }

@@ -3,21 +3,26 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Editor, RichTextEditor } from '@mantine/rte'
 import Button from '../components/Button'
 import Toolbar from '../components/Toolbar'
-import { saveNote, useAppDispatch } from '../store'
+import { saveNote, updateNote, useAppDispatch, useAppSelector } from '../store'
 
 const FORM_BUTTON_CLASSES = 'w-[4em] font-semibold'
 
 export default function Form() {
   const { id } = useParams()
 
+  const existingNote = useAppSelector(state => state.notes.byId[Number(id)])
+
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const [note, setNote] = useState({
-    id: 0,
-    title: '',
-    content: '',
-  } as Note)
+  const [note, setNote] = useState(
+    existingNote ||
+      ({
+        id: 0,
+        title: '',
+        content: '',
+      } as Note)
+  )
 
   const editor = useRef<Editor>(null)
 
@@ -26,11 +31,15 @@ export default function Form() {
   }
 
   const onSaveClicked = () => {
-    dispatch(saveNote(note))
+    if (note.id) {
+      dispatch(updateNote(note))
+    } else {
+      dispatch(saveNote(note))
+    }
     navigate('/')
   }
 
-  const updateNote = (diff: { [key: string]: string }) => {
+  const updateNoteFields = (diff: { [key: string]: string }) => {
     setNote({ ...note, ...diff })
   }
 
@@ -68,7 +77,7 @@ export default function Form() {
             className="block w-full border-0 p-0 text-gray-900 placeholder-gray-500"
             id="note-title"
             name="title"
-            onChange={ev => updateNote({ title: ev.target.value })}
+            onChange={ev => updateNoteFields({ title: ev.target.value })}
             placeholder="Note title"
             value={note.title}
           />
@@ -88,7 +97,7 @@ export default function Form() {
             ['link', 'blockquote', 'codeBlock', 'image'],
           ]}
           onClick={() => editor.current?.focus()}
-          onChange={content => updateNote({ content })}
+          onChange={content => updateNoteFields({ content })}
           value={note.content}
         />
       </div>
