@@ -86,6 +86,8 @@ const noteSlice = createSlice({
 
         state.all.push(note)
         state.byId[note.id] = note
+
+        state.all = state.all.sort(noteComparer)
       }
     )
 
