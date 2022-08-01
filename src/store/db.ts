@@ -17,6 +17,10 @@ export default class DB {
     return this.instance
   }
 
+  public async deleteNote(note: Note) {
+    await this.db.execute('DELETE FROM notes WHERE id = $1', [note.id])
+  }
+
   public async loadAllNotes(): Promise<Note[]> {
     return await this.db.select('SELECT * FROM notes')
   }

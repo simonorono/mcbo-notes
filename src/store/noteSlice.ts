@@ -11,6 +11,14 @@ const initialState: NoteState = {
   byId: {},
 }
 
+const deleteNote = createAsyncThunk('notes/delete', async (note: Note) => {
+  const db = await DB.getInstance()
+
+  await db.deleteNote(note)
+
+  return note
+})
+
 const loadAllNotes = createAsyncThunk('notes/load', async () => {
   const db = await DB.getInstance()
 
@@ -47,12 +55,19 @@ function noteComparer(a: Note, b: Note) {
 const noteSlice = createSlice({
   name: 'notes',
   initialState,
-  reducers: {
-    deleteNote(state, action: PayloadAction<Note>) {
-      state.all = state.all.filter(note => note.id != action.payload.id)
-    },
-  },
+  reducers: {},
   extraReducers: builder => {
+    builder.addCase(
+      deleteNote.fulfilled,
+      (state, action: PayloadAction<Note>) => {
+        state.all = state.all.filter(note => note.id != action.payload.id)
+        state.byId = {}
+        state.all.forEach(note => {
+          state.byId[note.id] = note
+        })
+      }
+    )
+
     builder.addCase(
       loadAllNotes.fulfilled,
       (state, action: PayloadAction<Note[]>) => {
@@ -87,8 +102,6 @@ const noteSlice = createSlice({
   },
 })
 
-export const { deleteNote } = noteSlice.actions
-
-export { loadAllNotes, saveNote, updateNote }
+export { deleteNote, loadAllNotes, saveNote, updateNote }
 
 export default noteSlice.reducer
