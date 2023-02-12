@@ -3,12 +3,13 @@
     windows_subsystem = "windows"
 )]
 
-use tauri_plugin_sql::{Migration, MigrationKind, TauriSql};
+use tauri_plugin_sql::{Migration, MigrationKind};
 
 fn main() {
     let context = tauri::generate_context!();
-    tauri::Builder::default()
-        .plugin(TauriSql::default().add_migrations(
+
+    let sqlite_plugin = tauri_plugin_sql::Builder::default()
+        .add_migrations(
             "sqlite:notes.db",
             vec![Migration {
                 version: 1,
@@ -16,7 +17,11 @@ fn main() {
                 sql: include_str!("../migrations/001.sql"),
                 kind: MigrationKind::Up,
             }],
-        ))
+        )
+        .build();
+
+    tauri::Builder::default()
+        .plugin(sqlite_plugin)
         .run(context)
         .expect("error while running tauri application");
 }
