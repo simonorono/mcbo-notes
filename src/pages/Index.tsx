@@ -12,7 +12,7 @@ export default function Index() {
       <div className="flex h-screen flex-col">
         <div className="bg-white">
           <Toolbar>
-            <h1 className="w-full text-2xl font-bold">Tauri Notes</h1>
+            <h1 className="w-full text-2xl font-bold">Mcbo Notes</h1>
           </Toolbar>
         </div>
 
